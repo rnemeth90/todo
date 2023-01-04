@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -38,22 +39,28 @@ func main() {
 	if fileName == "" {
 		home, err := os.UserHomeDir()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "")
+			fmt.Fprintln(os.Stderr, err)
 		}
 		fileName = home + string(os.PathSeparator) + ".todo.json"
 	}
 
-	li := &todo.List{}
-	if err := li.List(fileName); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+	// create the file if it doesn't exist
+	if _, err := os.Stat(fileName); err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			if _, err := os.Create(fileName); err != nil {
+				fmt.Fprintln(os.Stderr, err)
+			}
+		}
 	}
 
+	// create a list struct and load it from the todo file
+	li := &todo.List{}
+	li.List(fileName)
+
+	// handle input
 	switch {
 	case task != "":
 		li.Add(task)
-
-		fmt.Printf("Adding %s\n", task)
 
 		if err := li.Save(fileName); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -64,9 +71,12 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		for _, item := range *li {
+		for index, item := range *li {
 			if !item.Done {
-				fmt.Println(item.Task)
+				fmt.Printf("%d [ ] %s\n", index+1, item.Task)
+			} else {
+				fmt.Printf("%d [x] %s\n", index+1, item.Task)
+
 			}
 		}
 	case complete > 0:
@@ -88,5 +98,4 @@ func main() {
 			os.Exit(1)
 		}
 	}
-
 }

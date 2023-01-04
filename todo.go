@@ -18,12 +18,15 @@ import (
 type item struct {
 	Task        string
 	Done        bool
+	Index       int
 	CreatedAt   time.Time
 	CompletedAt time.Time
 }
 
+// List represents a list of todo items
 type List []item
 
+// Add will add a todo item to the list
 func (l *List) Add(taskName string) {
 
 	t := item{
@@ -36,17 +39,19 @@ func (l *List) Add(taskName string) {
 	*l = append(*l, t)
 }
 
+// Complete marks an item in the list as complete
 func (l *List) Complete(i int) error {
 	ls := *l
-	for k, _ := range *l {
-		if i == k-1 {
-			ls[i].Done = true
-			ls[i].CompletedAt = time.Now()
+	for k := range *l {
+		if i-1 == k {
+			ls[i-1].Done = true
+			ls[i-1].CompletedAt = time.Now()
 		}
 	}
 	return nil
 }
 
+// Delete is used to delete an item from the todo file
 func (l *List) Delete(i int) error {
 	ls := *l
 	if i <= 0 || i > len(ls) {
@@ -56,6 +61,7 @@ func (l *List) Delete(i int) error {
 	return nil
 }
 
+// Save is used to save the list of items to the todo file
 func (l *List) Save(fileName string) error {
 	js, err := json.Marshal(l)
 	if err != nil {
@@ -65,6 +71,7 @@ func (l *List) Save(fileName string) error {
 	return ioutil.WriteFile(fileName, js, 0644)
 }
 
+// List returns a list of todo items from the todo file
 func (l *List) List(fileName string) error {
 	file, err := ioutil.ReadFile(fileName)
 	if err != nil {
@@ -74,5 +81,8 @@ func (l *List) List(fileName string) error {
 		return err
 	}
 
-	return json.Unmarshal(file, l)
+	if len(file) > 0 {
+		return json.Unmarshal(file, l)
+	}
+	return errors.New("File is empty")
 }
