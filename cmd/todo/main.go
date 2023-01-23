@@ -67,13 +67,7 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-	case argTask != "":
-		li.Add(argTask)
 
-		if err := li.Save(fileName); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(1)
-		}
 	case list:
 		if err := li.List(fileName); err != nil {
 			fmt.Fprintln(os.Stderr, err)
