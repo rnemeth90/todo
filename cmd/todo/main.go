@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/rnemeth90/todo"
 )
@@ -33,8 +34,13 @@ func usage() {
 func main() {
 	flag.Parse()
 
+<<<<<<< HEAD
 	// args := flag.Args()
 	// task = task + " " + strings.Join(args, " ")
+=======
+	args := flag.Args()
+	argTask := strings.Join(args, " ")
+>>>>>>> 00ad6fbcaf7c140ce356616ecd95c60b5b1ec78d
 
 	fileName := os.Getenv("TODO_FILENAME")
 	if fileName == "" {
@@ -62,6 +68,13 @@ func main() {
 	switch {
 	case task != "":
 		li.Add(task)
+
+		if err := li.Save(fileName); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+	case argTask != "":
+		li.Add(argTask)
 
 		if err := li.Save(fileName); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -98,5 +111,7 @@ func main() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
+	default:
+		usage()
 	}
 }
