@@ -5,21 +5,22 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/rnemeth90/todo"
 )
 
 var (
-	task     string
+	add      string
 	complete int
 	delete   int
 	list     bool
 )
 
 func init() {
-	flag.StringVar(&task, "task", "", "add a todo item")
-	flag.IntVar(&complete, "complete", 0, "mark an item as complete")
-	flag.IntVar(&delete, "delete", 0, "delete an item")
+	flag.StringVar(&add, "add", "", "add a todo item to the list")
+	flag.IntVar(&complete, "complete", 0, "mark an item in the list as complete")
+	flag.IntVar(&delete, "delete", 0, "delete an item from the list")
 	flag.BoolVar(&list, "list", false, "list todo items")
 
 	flag.Usage = usage
@@ -32,9 +33,6 @@ func usage() {
 
 func main() {
 	flag.Parse()
-
-	// args := flag.Args()
-	// task = task + " " + strings.Join(args, " ")
 
 	fileName := os.Getenv("TODO_FILENAME")
 	if fileName == "" {
@@ -56,20 +54,19 @@ func main() {
 
 	// create a list struct and load it from the todo file
 	li := &todo.List{}
-	li.List(fileName)
+	li.Get(fileName)
 
 	// handle input
 	switch {
-	case task != "":
-		li.Add(task)
+	case add != "":
+		li.Add(add + " " + strings.Join(flag.Args(), " "))
 
 		if err := li.Save(fileName); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-
 	case list:
-		if err := li.List(fileName); err != nil {
+		if err := li.Get(fileName); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}

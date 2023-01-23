@@ -1,6 +1,7 @@
 package todo_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/rnemeth90/todo"
@@ -55,6 +56,26 @@ func TestComplete(t *testing.T) {
 	}
 }
 
-func TestListAndSave(t *testing.T) {
+func TestGetAndSave(t *testing.T) {
+	l1 := todo.List{}
+	l2 := todo.List{}
 
+	l1.Add("Testing a task")
+
+	tempFile, err := os.CreateTemp(os.TempDir(), "todo")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err := l1.Save(tempFile.Name()); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := l2.Get(tempFile.Name()); err != nil {
+		t.Fatal(err)
+	}
+
+	if l1[0].Task != l2[0].Task {
+		t.Errorf("expected %s to match %s, but got %s instead", l1[0].Task, l1[0].Task, l2[0].Task)
+	}
 }

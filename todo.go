@@ -9,12 +9,6 @@ import (
 	"time"
 )
 
-// add
-// complete
-// delete
-// save
-// list
-
 type item struct {
 	Task        string
 	Done        bool
@@ -71,8 +65,8 @@ func (l *List) Save(fileName string) error {
 	return ioutil.WriteFile(fileName, js, 0644)
 }
 
-// List returns a list of todo items from the todo file
-func (l *List) List(fileName string) error {
+// Get returns a list of todo items from the todo file
+func (l *List) Get(fileName string) error {
 	file, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
