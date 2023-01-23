@@ -34,6 +34,7 @@ func main() {
 	flag.Parse()
 
 	// args := flag.Args()
+	// task = task + " " + strings.Join(args, " ")
 
 	fileName := os.Getenv("TODO_FILENAME")
 	if fileName == "" {
