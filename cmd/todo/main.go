@@ -18,10 +18,10 @@ var (
 )
 
 func init() {
-	flag.StringVar(&add, "add", "", "add a todo item to the list")
-	flag.IntVar(&complete, "complete", 0, "mark an item in the list as complete")
-	flag.IntVar(&delete, "delete", 0, "delete an item from the list")
-	flag.BoolVar(&list, "list", false, "list todo items")
+	flag.StringVar(&add, "a", "", "add a todo item to the list")
+	flag.IntVar(&complete, "c", 0, "mark an item in the list as complete")
+	flag.IntVar(&delete, "d", 0, "delete an item from the list")
+	flag.BoolVar(&list, "l", false, "list todo items")
 
 	flag.Usage = usage
 }
