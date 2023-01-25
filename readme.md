@@ -21,9 +21,10 @@ Or download the latest release [here](https://github.com/rnemeth90/todo/releases
 If you need help, submit an issue
 
 ## To Do
-- [ ] Integration tests are failing, need to fix
+- [x] Integration tests are failing, need to fix
 - [ ] Need to finish up the readme
 - [ ] Add test stage to the build
+- [x] Add tests for all methods in API
 
 ## Version History
 * 0.1
