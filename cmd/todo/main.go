@@ -54,7 +54,9 @@ func main() {
 
 	// create a list struct and load it from the todo file
 	li := &todo.List{}
-	li.Get(fileName)
+	if err := li.Get(fileName); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
 
 	// handle input
 	switch {
@@ -66,18 +68,7 @@ func main() {
 			os.Exit(1)
 		}
 	case list:
-		if err := li.Get(fileName); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(1)
-		}
-		for index, item := range *li {
-			if !item.Done {
-				fmt.Printf("%d [ ] %s\n", index+1, item.Task)
-			} else {
-				fmt.Printf("%d [x] %s\n", index+1, item.Task)
-
-			}
-		}
+		fmt.Println(li)
 	case complete > 0:
 		if err := li.Complete(complete); err != nil {
 			fmt.Fprintln(os.Stderr, err)
