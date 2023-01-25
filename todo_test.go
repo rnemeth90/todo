@@ -52,7 +52,7 @@ func TestComplete(t *testing.T) {
 
 	li.Complete(1)
 	if li[0].Done != true {
-		t.Errorf("expected %s to be complete, but it was not. Index %d, %v", li[0].Task, li[0].Index, li[0].Done)
+		t.Errorf("expected %s to be complete, but it was not", li[0].Task)
 	}
 }
 

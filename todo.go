@@ -12,7 +12,6 @@ import (
 type item struct {
 	Task        string
 	Done        bool
-	Index       int
 	CreatedAt   time.Time
 	CompletedAt time.Time
 }
@@ -79,4 +78,18 @@ func (l *List) Get(fileName string) error {
 		return json.Unmarshal(file, l)
 	}
 	return errors.New("File is empty")
+}
+
+func (l *List) String() string {
+	formatted := ""
+
+	for k, t := range *l {
+		prefix := "[ ] "
+		if t.Done {
+			prefix = "[x] "
+		}
+
+		formatted += fmt.Sprintf("%s%d: %s\n", prefix, k+1, t.Task)
+	}
+	return formatted
 }
